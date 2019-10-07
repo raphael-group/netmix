@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import math, numpy as np
+import math, numpy as np, scipy as sp, scipy.stats
 
 ################################################################################
 #
@@ -89,7 +89,7 @@ def em(x, tol=1e-3, max_num_iter=10**3, num_trials=10):
         pis[trial] = pi
         log_likelihoods[trial] = log_likelihood_sum(x, mu, pi)
 
-    trial = np.argmax(log_likelihood)
+    trial = np.argmax(log_likelihoods)
     return mus[trial], pis[trial]
 
 ################################################################################
@@ -212,7 +212,7 @@ def save_node_score(filename, node_to_score, reverse=True):
     '''
     Save node scores.
     '''
-    node_score_list = sorted(node_to_score.items(), key=lambda (node, score): (-float(score) if reverse else float(score), node))
+    node_score_list = sorted(node_to_score.items(), key=lambda node_score: (-float(node_score[1]) if reverse else float(node_score[1]), node_score[0]))
     with open(filename, 'w') as f:
         f.write('\n'.join('{}\t{}'.format(node, score) for node, score in node_score_list))
 
