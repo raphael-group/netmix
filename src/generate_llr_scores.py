@@ -44,6 +44,10 @@ def run(args):
 
     # Convert scores to log-likelihood ratios.
     scores = log_likelihood_ratio(scores, mu, pi)
+    if r:
+        sorted_scores = np.sort(scores)[::-1]
+        threshold = 0.5*(sorted_scores[max(0, k-1)] + sorted_scores[min(k, n-1)])
+        scores = [score-threshold for score in scores]
 
     # Save results.
     node_to_score = dict(zip(nodes, scores))
