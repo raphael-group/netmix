@@ -38,6 +38,16 @@ def log_likelihood_sum(x, mu, pi):
     b = (1-pi)*pdf(x)
     return np.nansum(np.log(a+b))
 
+def responsibility(x, mu, pi):
+    a = pi*pdf(x, mu)
+    b = (1-pi)*pdf(x)
+    return a/(a+b)
+
+def log_responsibility(x, mu, pi):
+    a = pi*pdf(x, mu)
+    b = (1-pi)*pdf(x)
+    return np.log(a)-np.log(a+b)
+
 def single_em(x, mu=0.0, pi=0.5, tol=1e-3, max_num_iter=10**3):
     x = np.asarray(x)
     a = np.zeros(np.shape(x))
