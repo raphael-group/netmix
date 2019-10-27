@@ -4,7 +4,7 @@
 import math, numpy as np, scipy as sp, scipy.stats
 import os, sys, argparse
 
-from common import em, log_likelihood_ratio, load_node_score, save_node_score, load_nodes
+from common import em, responsibility, load_node_score, save_node_score, load_nodes
 
 # Parse arguments.
 def get_parser():
@@ -50,7 +50,7 @@ def run(args):
         scores = [score-threshold for score in scores]
     else:
         scores = responsibility(scores, mu, pi)
-    
+
     scores = [score - 0.5 for score in scores]
 
     # Save results.
