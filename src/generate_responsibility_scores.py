@@ -39,6 +39,7 @@ def run(args):
 
     # Convert scores to responsibilities.
     scores = responsibility(scores, mu, pi)
+    scores -= 0.5
 
     # Save results.
     node_to_score = dict(zip(nodes, scores))
