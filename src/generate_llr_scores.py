@@ -21,35 +21,24 @@ def run(args):
     node_to_score = load_node_score(args.input_file)
 
     nodes = sorted(node_to_score)
-    scores = [node_to_score[node] for node in nodes]
+    scores = np.array([node_to_score[node] for node in nodes])
     n = len(scores)
 
     # Transform p-values to z-scores, i.e., z = \Phi^{-1}(1 - p).
     if args.p_values:
-        scores = [sp.stats.norm.isf(score) for score in scores]
+        scores = sp.stats.norm.isf(scores)
 
-    # Estimate mixture model parameters.
-    if args.outlier_node_file is not None:
+    # Estimate mixture model parameters; remove potential outlier nodes from fit.
+    if args.outlier_node_file is None:
+        mu, pi = em(scores)
+    else:
         outlier_nodes = load_nodes(args.outlier_node_file)
         non_outlier_nodes = sorted(set(nodes)-set(outlier_nodes))
-        outlier_scores = [node_to_score[node] for node in outlier_nodes]
-        non_outlier_scores = [node_to_score[node] for node in non_outlier_nodes]
-        r = len(outlier_scores)
-        s = len(non_outlier_scores)
-
+        non_outlier_scores = np.array([node_to_score[node] for node in non_outlier_nodes])
         mu, pi = em(non_outlier_scores)
-        k = r + int(round(pi*s))
-    else:
-        mu, pi = em(scores)
 
     # Convert scores to log-likelihood ratios.
-    if args.outlier_node_file:
-        scores = log_likelihood_ratio(scores, mu, pi)
-        sorted_scores = np.sort(scores)[::-1]
-        threshold = 0.5*(sorted_scores[max(0, k-1)] + sorted_scores[min(k, n-1)])
-        scores = [score-threshold for score in scores]
-    else:
-        scores = log_likelihood_ratio(scores, mu, pi)
+    scores = log_likelihood_ratio(scores, mu, pi)
 
     # Save results.
     node_to_score = dict(zip(nodes, scores))
