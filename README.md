@@ -85,4 +85,4 @@ See `LICENSE` for license information.
 ### Citation
 If you use NetMix in your work, then please cite the following manuscript.
 
-> M.A. Reyna, B.J. Raphael. Network-structured mixture models for altered subnetwork discovery.  In submission.
+> M.A. Reyna*, U. Chitra*, R. Elyanow, B.J. Raphael. NetMix: A network-structured mixture model for reducing bias in the identification of altered subnetworks.  In submission.
