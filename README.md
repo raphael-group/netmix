@@ -1,7 +1,7 @@
 NetMix
 =======================
 
-NetMix is an algorithm for identifying altered subnetworks with node scores that are distributed differently from other nodes in the network.  NetMix improves upon current methods by using a Gaussian Mixture Model to find a less biased estimate the size of an altered subnetwork. *This README is under construction.*
+NetMix is an algorithm for identifying altered subnetworks with node scores that are distributed differently from other nodes in the network.  NetMix improves upon current methods by using a Gaussian Mixture Model to find a less biased estimate of the size of an altered subnetwork. *This README is under construction.*
 
 Setup
 ------------------------
@@ -43,8 +43,8 @@ This script illustrates the full NetMix pipeline.  It should require a few minut
 Use
 ----------------
 NetMix has two main steps:
-1. Define responsibility-based node scores.
-2. Find the maximum-weight connected subgraph using the responsibility-based node scores.
+1. Define node scores.
+2. Find the maximum-weight connected subgraph using the node scores.
 
 The manuscript defines these steps, and the example code illustrates them.  In particular, they take the following inputs and return the following output.
 
@@ -65,7 +65,7 @@ Each line in this file associates a node with a score:
     C    3
 
 ### Output
-NetMix reports a set of nodes that define the maximum-weight connected subgraph using our likelihood-based node scores.  For example, the following example defines the set of nodes `B` and `C`, where each line in the output file is a node:
+NetMix reports a set of nodes that define the maximum-weight connected subgraph using our node scores.  For example, the following example defines the set of nodes `B` and `C`, where each line in the output file is a node:
 
     B
     C
