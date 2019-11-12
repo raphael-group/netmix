@@ -4,14 +4,14 @@
 import math, numpy as np, scipy as sp, scipy.stats, random, networkx as nx
 import sys, argparse
 
-from common import load_edge_list, save_edge_list, save_node_score
+from common import load_edge_list, save_edge_list, save_nodes, save_node_score
 
 # Parse arguments.
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-elf', '--edge_list_file', type=str, required=True)
     parser.add_argument('-mu', type=float, required=True)
-    parser.add_argument('-pi', type=float, required=True)
+    parser.add_argument('-alpha', type=float, required=True)
     parser.add_argument('-is', '--implant_seed', type=int, required=False)
     parser.add_argument('-ss', '--score_seed', type=int, required=False)
     parser.add_argument('-nsf', '--node_score_file', type=str, required=True)
@@ -31,15 +31,15 @@ def run(args):
     sorted_nodes = sorted(G.nodes())
     num_nodes = G.number_of_nodes()
 
-    assert 0<=args.pi<=1
-    k = int(round(args.pi*num_nodes))
+    assert 0<=args.alpha<=1
+    k = int(round(args.alpha*num_nodes))
 
     # Choose implant.
     random.seed(args.implant_seed)
 
     # Traverse k distinct nodes with random walk on graph.
     implanted_nodes = set()
-    if k>0:
+    if k:
         u = random.choice(sorted_nodes)
         implanted_nodes.add(u)
         while len(implanted_nodes)<k:
@@ -67,14 +67,12 @@ def run(args):
         node_to_score[node] = score
 
     implanted_nodes = sorted(implanted_nodes, key=lambda node: (-node_to_score[node], node)) if implanted_nodes else []
-    with open(args.implanted_nodes_file, 'w') as f:
-        f.write('\n'.join(implanted_nodes))
+    save_nodes(args.implanted_nodes_file, implanted_nodes)
 
     non_implanted_nodes_string = sorted(non_implanted_nodes, key=lambda node: (-node_to_score[node], node)) if non_implanted_nodes else []
-    with open(args.non_implanted_nodes_file, 'w') as f:
-        f.write('\n'.join(non_implanted_nodes))
+    save_nodes(args.non_implanted_nodes_file, non_implanted_nodes)
 
     save_node_score(args.node_score_file, node_to_score)
-    
+
 if __name__=='__main__':
     run(get_parser().parse_args(sys.argv[1:]))

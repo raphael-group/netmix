@@ -18,89 +18,84 @@ def cdf(x, mu=0.0, sigma=1.0):
 def sf(x, mu=0.0, sigma=1.0):
     return sp.stats.norm.sf(x, mu, sigma)
 
-def fdr(x, mu, pi):
-    a = pi*sf(x, mu)
-    b = (1-pi)*sf(x)
-    return b/(a+b)
-
-def likelihood_ratio(x, mu, pi):
-    a = pi*pdf(x, mu)
-    b = (1-pi)*pdf(x)
+def likelihood_ratio(x, mu, alpha):
+    a = alpha*pdf(x, mu)
+    b = (1-alpha)*pdf(x)
     return b/a
 
-def log_likelihood_ratio(x, mu, pi):
-    a = pi*pdf(x, mu)
-    b = (1-pi)*pdf(x)
+def log_likelihood_ratio(x, mu, alpha):
+    a = alpha*pdf(x, mu)
+    b = (1-alpha)*pdf(x)
     return np.log(a)-np.log(b)
 
-def log_likelihood_sum(x, mu, pi):
-    a = pi*pdf(x, mu)
-    b = (1-pi)*pdf(x)
+def log_likelihood_sum(x, mu, alpha):
+    a = alpha*pdf(x, mu)
+    b = (1-alpha)*pdf(x)
     return np.nansum(np.log(a+b))
 
-def responsibility(x, mu, pi):
-    a = pi*pdf(x, mu)
-    b = (1-pi)*pdf(x)
+def responsibility(x, mu, alpha):
+    a = alpha*pdf(x, mu)
+    b = (1-alpha)*pdf(x)
     return a/(a+b)
 
-def log_responsibility(x, mu, pi):
-    a = pi*pdf(x, mu)
-    b = (1-pi)*pdf(x)
+def log_responsibility(x, mu, alpha):
+    a = alpha*pdf(x, mu)
+    b = (1-alpha)*pdf(x)
     return np.log(a)-np.log(a+b)
 
-def single_em(x, mu=0.0, pi=0.5, tol=1e-3, max_num_iter=10**3):
+def single_em(x, mu=0.0, alpha=0.5, tol=1e-3, max_num_iter=10**3):
     x = np.asarray(x)
     a = np.zeros(np.shape(x))
     b = np.zeros(np.shape(x))
     gamma = np.zeros(np.shape(x))
     n = np.size(x)
 
-    previous_log_likelihood = log_likelihood_sum(x, mu, pi)
+    previous_log_likelihood = log_likelihood_sum(x, mu, alpha)
 
     for _ in range(max_num_iter):
         # Perform E step.
-        a[:] = pi*pdf(x, mu)
-        b[:] = (1-pi)*pdf(x)
+        a[:] = alpha*pdf(x, mu)
+        b[:] = (1-alpha)*pdf(x)
         gamma[:] = a/(a+b)
 
         # Perform M step.
         sum_gamma = np.sum(gamma)
         mu = np.sum(gamma*x)/sum_gamma
-        pi = sum_gamma/n
+        alpha = sum_gamma/n
 
         # Check for convergence.
-        current_log_likelihood = log_likelihood_sum(x, mu, pi)
+        current_log_likelihood = log_likelihood_sum(x, mu, alpha)
         if current_log_likelihood<(1+tol)*previous_log_likelihood:
             break
         else:
             previous_log_likelihood = current_log_likelihood
 
-    return mu, pi
+    return mu, alpha
 
 def em(x, tol=1e-3, max_num_iter=10**3, num_trials=10):
     x = np.sort(np.asarray(x).flatten())[::-1]
     n = np.size(x)
 
     mus = np.zeros(num_trials)
-    pis = np.zeros(num_trials)
+    alphas = np.zeros(num_trials)
     log_likelihoods = np.zeros(num_trials)
 
     # Initialize EM algorithm by partitioning scores into high and low
     # components and using size and sample mean of higher component as
     # estimates of size and distribution mean of altered subnetwork.
     for trial in range(num_trials):
-        pi = (trial+0.5)/num_trials
-        k = int(round(pi*n))
+        alpha = (trial+0.5)/num_trials
+        k = int(round(alpha*n))
         mu = np.mean(x[:k]) if k>0 else 0.0
 
-        mu, pi = single_em(x, mu, pi, tol, max_num_iter)
+        mu, alpha = single_em(x, mu, alpha, tol, max_num_iter)
 
         mus[trial] = mu
-        pis[trial] = pi
-        log_likelihoods[trial] = log_likelihood_sum(x, mu, pi)
+        alphas[trial] = alpha
+        log_likelihoods[trial] = log_likelihood_sum(x, mu, alpha)
 
     trial = np.argmax(log_likelihoods)
-    return mus[trial], pis[trial]
+    return mus[trial], alphas[trial]
 
 ################################################################################
 #

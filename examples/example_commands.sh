@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 
+################################################################################
+#
+#   Set directories.
+#
+################################################################################
+
 scripts=../src
 data=data
 results=results
 heinz_directory=""  # Install heinz and add the directory for heinz here.
 
+mkdir -p $data
+mkdir -p $results
+
 if [ ! -f $heinz_directory/heinz ]
 then
-    echo "\""$heinz"/heinz\" does not exist; install to identify NSGMM."
+    echo "\""$heinz"/heinz\" does not exist; install to use NetMix."
 fi
 
 ################################################################################
@@ -20,12 +29,9 @@ echo "Generating simulated data..."
 
 n=1000      # Number of nodes
 m=5         # Parameter for Barabasi-Albert preferential attachment model
-mu=2.5      # Altered distribution mean 
-pi=0.02     # Fraction of nodes drawn from altered distribution
+mu=2.5      # Altered distribution mean
+alpha=0.02  # Fraction of nodes drawn from altered distribution
 seed=12345  # Random seed
-
-mkdir -p $data
-mkdir -p $results
 
 # Generate random network.
 python $scripts/generate_barabasi_albert_graph.py \
@@ -35,10 +41,10 @@ python $scripts/generate_barabasi_albert_graph.py \
     -elf $data/network.tsv
 
 # Generate random scores.
-python $scripts/generate_weights.py \
+python $scripts/generate_vertex_weights.py \
     -elf $data/network.tsv \
     -mu  $mu \
-    -pi  $pi \
+    -a   $alpha \
     -is  $seed \
     -ss  $seed \
     -nsf $data/z_scores.tsv \
@@ -53,23 +59,23 @@ python $scripts/generate_weights.py \
 
 echo "Identifying altered subnetwork..."
 
-# Generate likelihood-based scores.
-python $scripts/generate_llr_scores.py \
+# Generate responsibility-based scores.
+python $scripts/compute_scores.py \
     -i $data/z_scores.tsv \
-    -o $data/llr_scores.tsv
+    -o $data/responsibility_scores.tsv
 
-# Find nodes for GMM problem.
-python $scripts/find_maximum_subset.py \
-    -i $data/llr_scores.tsv \
-    -o $results/gmm_results.txt
+# Find nodes for unconstrained ASD problem.
+python $scripts/compute_positive_subset.py \
+    -i $data/responsibility_scores.tsv \
+    -o $results/asd_unconstrained_results.txt
 
-# Find nodes for NSGMM problem.
+# Find nodes for constrained ASD problem.
 if [ -f $heinz_directory/heinz ]
 then
     $heinz_directory/./heinz \
         -e $data/network.tsv \
-        -n $data/llr_scores.tsv \
-        -o $results/nsgmm_output.tsv \
+        -n $data/responsibility_scores.tsv \
+        -o $results/asd_constrained_output.tsv \
         -m 4 \
         -t 1800 \
         -v 0 \
@@ -77,7 +83,7 @@ then
 fi
 
 python $scripts/process_heinz_output.py \
-    -i $results/nsgmm_output.tsv \
-    -o $results/nsgmm_results.txt
-    
-rm -f $results/nsgmm_output.tsv
+    -i $results/asd_constrained_output.tsv \
+    -o $results/asd_constrained_results.txt
+
+rm -f $results/asd_constrained_output.tsv
