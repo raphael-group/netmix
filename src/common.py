@@ -275,6 +275,14 @@ def save_matrix(filename, A, matrix_name='A', dtype=np.float32):
     f[matrix_name] = np.asarray(A, dtype=dtype)
     f.close()
 
+def save_subgraph_size(filename, num):
+    '''
+    Save number of nodes in altered subgraph
+    '''
+
+    with open(filename, 'w') as f:
+        f.write(str(num))
+
 def status(message=''):
     '''
     Write status message to screen; overwrite previous status message and do not
