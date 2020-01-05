@@ -52,7 +52,7 @@ def run(args):
         raise NotImplementedError('{} score not implemented'.format(score_choice))
 
     # Shift scores.
-    if args.threshold_choice in ['mixing_proportion']:
+    if args.threshold_choice in ['mixing_proportions']:
         if args.outlier_node_file is None:
             n = np.size(scores)
             k = int(round(alpha*n))
