@@ -45,8 +45,11 @@ Use
 NetMix has two main steps:
 1. Define node scores.
 2. Find the maximum-weight connected subgraph using the node scores.
+3. (Optional) Compute statistical significance.
 
-The manuscript defines these steps, and the example code illustrates them.  In particular, they take the following inputs and return the following output.
+The NetMix manuscript defines these steps, and the [example code](https://github.com/raphael-group/netmix/blob/master/examples/example_commands.sh) illustrates them.  To compute permuted networks and scores for evaluating statistical signficance, see the Hierarchical HotNet [paper](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236) and [repository](https://github.com/raphael-group/hierarchical-hotnet), which describes and implements multiple [network](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_network.py) and [score](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_scores.py) permutation schemes.
+
+The above steps take the following inputs and return the following output.
 
 ### Input
 NetMix has two input files that together define a network with scores on the nodes of the network.  For example, the following example defines a network with nodes `A`, `B`, and `C`, where `C` is connected to both `A` and `B` and `A`, `B`, and `C` have scores `-1`, `2.5`, and `3`, respectively.
