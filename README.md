@@ -42,12 +42,12 @@ This script illustrates the full NetMix pipeline.  It should require less than a
 
 Use
 ----------------
-NetMix has two main steps:
+NetMix has three main steps:
 1. Define node scores.
 2. Find the maximum-weight connected subgraph using the node scores.
 3. (Optional) Compute statistical significance.
 
-The NetMix manuscript defines these steps, and the [example code](https://github.com/raphael-group/netmix/blob/master/examples/example_commands.sh) illustrates them.  To compute permuted networks and scores for evaluating statistical signficance, see the Hierarchical HotNet [paper](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236) and [repository](https://github.com/raphael-group/hierarchical-hotnet), which describes and implements multiple [network](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_network.py) and [score](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_scores.py) permutation schemes.
+The NetMix [manuscript](https://www.biorxiv.org/content/10.1101/2020.01.18.911438v1) defines these steps, and the [example code](https://github.com/raphael-group/netmix/blob/master/examples/example_commands.sh) illustrates them.  To compute permuted networks and scores for evaluating statistical signficance, see the Hierarchical HotNet [paper](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236) and [repository](https://github.com/raphael-group/hierarchical-hotnet), which describes and implements multiple [network](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_network.py) and [score](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_scores.py) permutation schemes.
 
 The above steps take the following inputs and return the following output.
 
@@ -86,6 +86,6 @@ If you are unable to run the example in the `examples` directory, then please po
 See `LICENSE` for license information.
 
 ### Citation
-If you use NetMix in your work, then please cite the following manuscript.
+If you use NetMix in your work, then please cite the following [manuscript](https://www.biorxiv.org/content/10.1101/2020.01.18.911438v1).
 
-> M.A. Reyna*, U. Chitra*, R. Elyanow, B.J. Raphael. NetMix: A network-structured mixture model for reducing bias in the identification of altered subnetworks.  In submission.
+> M.A. Reyna*, U. Chitra*, R. Elyanow, B.J. Raphael. NetMix: A network-structured mixture model for reducing bias in the identification of altered subnetworks.  RECOMB 2020.
