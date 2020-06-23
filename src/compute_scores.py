@@ -10,7 +10,7 @@ from common import em, responsibility, log_likelihood_ratio, load_node_score, sa
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input_file', type=str, required=True, help='Input score file')
-    parser.add_argument('-p', '--p_values', action='store_true', help='Transform p-values to z-scores')
+    parser.add_argument('-z', '--z_scores', action='store_true', help='Input score file already contains z-scores')
     parser.add_argument('-sc', '--score_choice', type=str, choices=['r', 'responsibility', 'responsibilities', 'llr', 'log_likelihood_ratio', 'log_likelihood_ratios', 'z', 'z-score', 'z-scores', 'z_score', 'z_scores'], default='responsibilities', help='Choose scores')
     parser.add_argument('-tc', '--threshold_choice', type=str, choices=['mixing_proportions', 'natural', 'none'], default='mixing_proportions', help='Choose score threshold')
     parser.add_argument('-onf', '--outlier_node_file', type=str, required=False, help='Outlier node file')
@@ -28,7 +28,8 @@ def run(args):
     n = len(scores)
 
     # Transform p-values to z-scores, i.e., z = \Phi^{-1}(1 - p).
-    if args.p_values:
+    if not args.z_scores:
+        scores = np.clip(scores, 2.2e-308, 1-2.2e-16)
         scores = sp.stats.norm.isf(scores)
 
     # Estimate mixture model parameters; remove potential outlier nodes from fit.

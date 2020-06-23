@@ -14,18 +14,16 @@ def get_parser():
 # Define functions.
 def load_heinz_results(filename):
     node_to_score = dict()
-    try:
-        with open(filename, 'r') as f:
-            for l in f:
-                if not l.startswith('#'):
-                    arrs = l.rstrip('\n').split('\t')
-                    if len(arrs)==2:
-                        node = arrs[0]
-                        score = arrs[1]
-                        if score!='NaN':
-                            node_to_score[node] = float(score)
-    except:
-        pass
+    with open(filename, 'r') as f:
+        for l in f:
+            if not l.startswith('#'):
+                arrs = l.rstrip('\n').split('\t')
+                if len(arrs)==2:
+                    node = arrs[0]
+                    score = arrs[1]
+                    if score!='NaN':
+                        node_to_score[node] = float(score)
+
     return sorted(node_to_score, key=lambda node: (-node_to_score[node], node))
 
 # Run script.
