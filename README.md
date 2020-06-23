@@ -29,7 +29,7 @@ Download NetMix. The following command clones the current NetMix repository from
 * [Virtualenv (for Python 3)](https://docs.python.org/3/library/venv.html)
 * [NetworkX (2.4)](http://networkx.github.io/)
 
-Most likely, NetMix will work with other versions of the above software. We recommend using a Python virtual environment, which allows Python packages to be installed or updated independently of system packages. The [heinz](https://github.com/ls-cwi/heinz) package **must** be installed before using NetMix. You can set the location for heinz in the `netmix.sh` script.
+Most likely, NetMix will work with other versions of the above software. We recommend using a Python virtual environment, which allows Python packages to be installed or updated independently of system packages. The [heinz](https://github.com/ls-cwi/heinz) package **must** be installed before using NetMix, and the location of heinz must be specified by editing the line `heinz_directory=""` in the NetMix [script](https://github.com/raphael-group/netmix/blob/master/netmix.sh).
 
 ### Use
 
@@ -45,7 +45,7 @@ NetMix has three main steps:
 2. Find the maximum-weight connected subgraph using the node scores.
 3. (Optional) Compute statistical significance.
 
-The NetMix [manuscript](https://link.springer.com/chapter/10.1007%2F978-3-030-45257-5_11) defines these steps, and the NetMix [script](https://github.com/raphael-group/netmix/blob/master/netwmixs.sh) combines them. To compute permuted networks and scores for evaluating statistical signficance, see the Hierarchical HotNet [paper](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236) and [repository](https://github.com/raphael-group/hierarchical-hotnet), which describes and implements multiple [network](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_network.py) and [score](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_scores.py) permutation schemes.
+The NetMix [manuscript](https://link.springer.com/chapter/10.1007%2F978-3-030-45257-5_11) defines these steps, and the NetMix [script](https://github.com/raphael-group/netmix/blob/master/netmix.sh) combines them. To compute permuted networks and scores for evaluating statistical signficance, see the Hierarchical HotNet [paper](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236) and [repository](https://github.com/raphael-group/hierarchical-hotnet), which describes and implements multiple [network](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_network.py) and [score](https://github.com/raphael-group/hierarchical-hotnet/blob/master/src/permute_scores.py) permutation schemes.
 
 These steps take the following inputs and return the following output.
 
