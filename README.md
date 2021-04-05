@@ -80,6 +80,24 @@ See the `examples` directory for an example that should complete in a few minute
 ### Support
 If you are unable to run the example in the `examples` directory, then please post an issue on GitHub.
 
+## Instructions for Installing heinz on Mac
+Below are instructions for installing the heinz package on Mac Catalina 64-bit, courtesy of Javed Aman.
+
+> 1) download and install cplex_studio12100-osx from ibm. Get academic version. This is not the latest version!
+> 2) download and extract Lemon from wget http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz
+> 3) inside the lemon directory run: cmake -DCMAKE_INSTALL_PREFIX=~/lemon
+> 4) then run make install
+> 5) leave lemon directory
+> 6) wget https://ogdf.uos.de/wp-content/uploads/2019/04/ogdf-snapshot-2015-05-30.zip, newer versions of OGDF will not work
+   including the one mentioned in the heinz github!!!
+> 7) extract the zip file
+> 8) enter the ogdf folder
+> 9) run: cmake .; followed by make -j16
+> 10) create a lib directory instide of the ogdf folder and move the static libraries libCoin.a and libOGDF.a into the lib folder
+> 11) leave the ogdf directory and move to the heinz directory
+> 12) create a build folder, change into it, and run the command: cmake -DLIBOGDF_ROOT=/path/to/OGDF-snapshot ..
+> 13) go one directory up back into the root of the heinz directory and run: make
+
 ### License
 See `LICENSE` for license information.
 
